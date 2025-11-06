@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: intern-service
+  datasource:
+    password: iiitn123
+    url: jdbc:mysql://localhost:3306/sample
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+
+events:
+  exchange: internprogress.events
+  routing:
+    feedback-created: feedback.created
+
+eureka:
+  client:
+    serverUrl:
+      defaultZone: http://localhost:8761/eureka
+  instance:
+    hostname: localhost
+    prefer-ip-address: true
+
+server:
+  port: 8082

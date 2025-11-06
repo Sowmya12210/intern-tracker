@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: notification-service
+  datasource:
+    password: iiitn123
+    url: jdbc:mysql://localhost:3306/sample
+    username: root
+  jpa:
+    hibernate:
+      ddl-auto: update
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 8084
