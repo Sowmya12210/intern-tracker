@@ -1,6 +1,7 @@
 package com.learnings.auth_service.exceptions;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import com.learnings.auth_service.dto.ErrorDetails;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,33 +18,31 @@ import java.util.stream.Collectors;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
+    public ResponseEntity<ErrorDetails> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
         return new ResponseEntity<>(new ErrorDetails(ex.getFieldErrors()
                 .parallelStream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining(", ")), LocalDateTime.now(), HttpStatus.BAD_REQUEST), HttpStatus.BAD_REQUEST);
-
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)
-    public ResponseEntity<?> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
+    public ResponseEntity<ErrorDetails> handleUserAlreadyExistsException(UserAlreadyExistsException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).
                 body(new ErrorDetails(ex.getMessage(), LocalDateTime.now(), HttpStatus.CONFLICT));
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleException(Exception ex) {
+    public ResponseEntity<ErrorDetails> handleException(Exception ex) {
         return new ResponseEntity<>
                 (new ErrorDetails(ex.getMessage(), LocalDateTime.now(), HttpStatus.INTERNAL_SERVER_ERROR),
                         HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<?> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
+    public ResponseEntity<ErrorDetails> handleHttpMessageNotReadable(HttpMessageNotReadableException ex) {
         String message = "Invalid request body";
         Throwable cause = ex.getCause();
-        if (cause instanceof InvalidFormatException ifx) {
-            if (ifx.getTargetType() != null && ifx.getTargetType().isEnum()) {
+        if (cause instanceof InvalidFormatException ifx && ifx.getTargetType() != null && ifx.getTargetType().isEnum()) {
                 String enumValues = Arrays.stream(ifx.getTargetType().getEnumConstants())
                         .map(Object::toString)
                         .collect(Collectors.joining(", "));
@@ -51,18 +50,8 @@ public class GlobalExceptionHandler {
                         ifx.getValue(),
                         ifx.getPath().getFirst().getFieldName(),
                         enumValues);
-            }
         }
-
-        ErrorDetails error = new ErrorDetails(
-                message,
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST
-        );
-
+        ErrorDetails error = new ErrorDetails(message, LocalDateTime.now(), HttpStatus.BAD_REQUEST);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
     }
-}
-
-record ErrorDetails(String message, LocalDateTime time, HttpStatus status) {
 }

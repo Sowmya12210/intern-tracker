@@ -3,11 +3,17 @@ spring:
         name: auth-service
     datasource:
       password: iiitn123
-      url: jdbc:mysql://localhost:3306/sample
+      url: jdbc:mysql://localhost:3306/user_details
       username: root
     jpa:
-        hibernate:
-          ddl-auto: update
+      hibernate:
+        ddl-auto: none
+
+    flyway:
+      enabled: true
+      locations: classpath:db/bootstrap
+      baseline-on-migrate: true
+      validate-migration-naming: true
 server:
   port: 8081
 

@@ -37,7 +37,7 @@ public class SecurityConfig {
                 .authorizeExchange(exchanges -> exchanges
                         .pathMatchers("/api/auth/login", "/api/auth/register", "/actuator/**").permitAll()
 
-//                        .pathMatchers(HttpMethod.POST, "/api/interns").hasRole("ADMIN")
+                        .pathMatchers(HttpMethod.POST, "/api/interns").hasRole("ADMIN")
                         .pathMatchers(HttpMethod.PATCH, "/api/interns/*/assign-mentor").hasRole("ADMIN")
                         .pathMatchers("/api/interns/me").hasRole("MENTOR")
 

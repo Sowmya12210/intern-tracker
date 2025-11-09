@@ -3,6 +3,7 @@ package com.learnings.api_gateway.security;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -37,7 +38,7 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
             jwt = jwtTokenValidator.validateToken(token);
         } catch (Exception e) {
             log.warn("JWT local validation failed: {}", e.getMessage());
-            return Mono.empty(); // causes 401 later if endpoint requires auth
+            return Mono.error(new BadCredentialsException("invalid_or_expired_token", e));
         }
 
         Long userId = jwtTokenValidator.getSubjectAsLong(jwt);
@@ -54,7 +55,7 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
                     boolean active = Boolean.TRUE.equals(map.get("active"));
                     if (!active) {
                         log.warn("Introspection: token inactive");
-                        return Mono.empty();
+                        return Mono.error(new BadCredentialsException("Introspection: token inactive"));
                     }
                     @SuppressWarnings("unchecked")
                     Map<String, Object> claims = (Map<String, Object>) map.get("claims");

@@ -2,7 +2,6 @@ package com.learnings.auth_service.controller;
 
 import com.learnings.auth_service.entity.User;
 import com.learnings.auth_service.repository.UserRepository;
-import io.jsonwebtoken.JwtException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -28,9 +27,11 @@ public class AuthIntrospectionController {
     @GetMapping("/introspect")
     public ResponseEntity<Map<String,Object>> introspect(@RequestHeader(value = HttpHeaders.AUTHORIZATION, required = false) String authorization) {
         Map<String,Object> resp = new HashMap<>();
+        String error = "error";
+        String active = "active";
         if (authorization == null || !authorization.startsWith("Bearer ")) {
-            resp.put("active", false);
-            resp.put("error", "missing_token");
+            resp.put(active, false);
+            resp.put(error, "missing_token");
             return ResponseEntity.ok(resp);
         }
         String token = authorization.substring("Bearer ".length()).trim();
@@ -40,21 +41,17 @@ public class AuthIntrospectionController {
             Long userId = Long.valueOf(sub);
             boolean userOk = userRepository.findById(userId).map(User::isEnabled).orElse(false);
             if (!userOk) {
-                resp.put("active", false);
-                resp.put("error", "user_not_found_or_disabled");
+                resp.put(active, false);
+                resp.put(error, "user_not_found_or_disabled");
             } else {
                 Map<String, Object> claims = new HashMap<>(jwt.getClaims());
-                resp.put("active", true);
+                resp.put(active, true);
                 resp.put("claims", claims);
             }
             return ResponseEntity.ok(resp);
-        } catch (JwtException ex) {
-            resp.put("active", false);
-            resp.put("error", ex.getMessage());
-            return ResponseEntity.ok(resp);
         } catch (Exception ex) {
-            resp.put("active", false);
-            resp.put("error", ex.getMessage());
+            resp.put(active, false);
+            resp.put(error, ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(resp);
         }
     }

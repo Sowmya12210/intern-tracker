@@ -4,9 +4,7 @@ import com.learnings.auth_service.dto.LoginResponse;
 import com.learnings.auth_service.dto.LoginValidation;
 import com.learnings.auth_service.dto.RegisterValidation;
 import com.learnings.auth_service.dto.UserDTO;
-import com.learnings.auth_service.entity.User;
 import com.learnings.auth_service.exceptions.UserAlreadyExistsException;
-import com.learnings.auth_service.mapper.UserMapper;
 import com.learnings.auth_service.service.UserService;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -23,13 +21,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
-    private final UserMapper userMapper;
 
     @PostMapping("/register")
     @Transactional
-    public ResponseEntity<?> register(@RequestBody @Validated(RegisterValidation.class) UserDTO userDTO) throws UserAlreadyExistsException {
-        User user = userMapper.toEntity(userDTO);
-        userService.registerUser(user);
+    public ResponseEntity<Void> register(@RequestBody @Validated(RegisterValidation.class) UserDTO userDTO) throws UserAlreadyExistsException {
+        userService.registerUser(userDTO);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
