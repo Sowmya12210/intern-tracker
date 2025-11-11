@@ -9,4 +9,9 @@ public class CourseDTO {
     private String description;
     private Integer durationInHours;
     private String tags;
+
+    public CourseDTO(Long l, String s) {
+        this.id = l;
+        this.title = s;
+    }
 }

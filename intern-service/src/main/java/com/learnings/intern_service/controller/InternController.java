@@ -12,7 +12,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 @RequestMapping("/api/interns")
-public class InternsController {
+public class InternController {
     private final InternService internService;
 
     @GetMapping

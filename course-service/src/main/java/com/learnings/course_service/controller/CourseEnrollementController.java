@@ -15,5 +15,4 @@ public class CourseEnrollementController {
     public CourseEnrollment enrollCourse(@RequestHeader("X-User-Id") Long userId, @PathVariable Long courseId) {
         return courseEnrollementService.enrollCourse(userId, courseId);
     }
-
 }

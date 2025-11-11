@@ -1,6 +1,5 @@
 package com.learnings.auth_service.entity;
 
-import com.learnings.auth_service.enums.RoleName;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;

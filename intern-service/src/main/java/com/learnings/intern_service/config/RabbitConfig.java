@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.amqp.support.converter.DefaultJackson2JavaTypeMapper;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -41,9 +40,6 @@ public class RabbitConfig {
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter(ObjectMapper objectMapper) {
         Jackson2JsonMessageConverter converter = new Jackson2JsonMessageConverter(objectMapper);
-        DefaultJackson2JavaTypeMapper typeMapper = new DefaultJackson2JavaTypeMapper();
-        typeMapper.setTrustedPackages("*");
-        converter.setJavaTypeMapper(typeMapper);
         return converter;
     }
 
