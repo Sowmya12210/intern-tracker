@@ -7,3 +7,6 @@
 /dataSources/
 /dataSources.local.xml
 /terraform/terraform.tfstate
+.terraform/
+terraform.tfstate
+terraform.tfstate.backup
