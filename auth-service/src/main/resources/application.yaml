@@ -3,7 +3,8 @@ spring:
         name: auth-service
     datasource:
       password: iiitn123
-      url: jdbc:mysql://localhost:3306/user_details
+      url: jdbc:mysql:///auth-service?cloudSqlInstance=fluted-factor-438905-d2:us-west1:intern-tracker&socketFactory=com.google.cloud.sql.mysql.SocketFactory
+
       username: root
     jpa:
       hibernate:
