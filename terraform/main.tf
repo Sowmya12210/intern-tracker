@@ -22,8 +22,8 @@ resource "google_sql_user" "common_user" {
 }
 
 resource "google_artifact_registry_repository" "azure-repo" {
-  location      = "us-west1"
-  repository_id = "azure-repo"
+  location      = var.region
+  repository_id = var.repo_id
   description   = "example docker repository"
   format        = "DOCKER"
 }

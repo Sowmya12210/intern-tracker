@@ -1,0 +1,47 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  margin: 0;
+  padding: 20px;
+}
+
+.login-form, .dashboard {
+  max-width: 400px;
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+}
+
+h1, h2 {
+  color: #004080;
+}
+
+input, button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 8px;
+}
+
+button {
+  background: #004080;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  background: #0066cc;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+ul li {
+  background: #eee;
+  margin: 5px 0;
+  padding: 8px;
+  border-radius: 4px;
+}

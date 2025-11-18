@@ -16,3 +16,6 @@ variable "services" {
 variable "project_id" {
     default = "fluted-factor-438905-d2"
 }
+variable repo_id {
+    default = "azure-repo"
+}
