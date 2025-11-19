@@ -1,7 +1,7 @@
 trigger:
 - dev
 pool:
- vmImage: ubuntu
+ vmImage: 'ubuntu-latest'
 variables:
 - group: azure-group
 - name: IMAGE_TAG
