@@ -21,7 +21,7 @@ stages:
         secureFile: 'gcp-key.json'
     - task: GoogleCloudSdkTool@1
       inputs:
-        versionSpec: '315.x'
+        versionSpec: '410.0.0'
         checkLatest: true
     - task: Maven@4
       inputs:
