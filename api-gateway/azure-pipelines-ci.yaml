@@ -35,9 +35,9 @@ stages:
         goals: 'clean package'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
-        javaHomeOption: 'JDKVersion'
+        javaHomeOption: 'Path'
         jdkDirectory: '/usr/lib/jvm/java-25-openjdk-amd64'
-        mavenVersionOption: 'Path'
+        mavenVersionOption: 'Default'
         mavenAuthenticateFeed: false
         effectivePomSkip: false
         sonarQubeRunAnalysis: false
