@@ -27,27 +27,54 @@ stages:
       inputs:
         versionSpec: '410.0.0'
         checkLatest: true
+    # - task: Bash@3
+    #   displayName: "Install JDK 21"
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       sudo apt-get update -y
+    #       sudo apt-get install -y openjdk-21-jdk
+    #       java -version
+
+
+    # - task: Maven@4
+    #   inputs:
+    #     mavenPomFile: 'api-gateway/pom.xml '
+    #     goals: 'clean package'
+    #     publishJUnitResults: true
+    #     testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    #     javaHomeOption: 'Path'
+    #     jdkDirectory: '/usr/lib/jvm/java-21-openjdk-amd64'
+    #     mavenVersionOption: 'Default'
+    #     mavenAuthenticateFeed: false
+    #     effectivePomSkip: false
+    #     sonarQubeRunAnalysis: false
     - task: Bash@3
-      displayName: "Install JDK 21"
+      displayName: Install JDK 21
       inputs:
         targetType: 'inline'
         script: |
+          set -euo pipefail
           sudo apt-get update -y
           sudo apt-get install -y openjdk-21-jdk
+          echo "JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64" >> $BASH_ENV
+          echo "PATH=$JAVA_HOME/bin:$PATH" >> $BASH_ENV
+          source $BASH_ENV
           java -version
 
-
     - task: Maven@4
+      displayName: Maven build (JDK 21, no preview)
       inputs:
-        mavenPomFile: 'api-gateway/pom.xml '
+        mavenPomFile: 'api-gateway/pom.xml'
         goals: 'clean package'
+        options: '-DskipTests=false'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         javaHomeOption: 'Path'
         jdkDirectory: '/usr/lib/jvm/java-21-openjdk-amd64'
         mavenVersionOption: 'Default'
         mavenAuthenticateFeed: false
-        effectivePomSkip: false
+        effectivePomSkip: true
         sonarQubeRunAnalysis: false
 
     - task: Bash@3
