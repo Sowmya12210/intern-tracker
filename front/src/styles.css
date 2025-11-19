@@ -6,10 +6,20 @@ body {
   color: #333;
 }
 
+/* Container */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
 /* Navbar */
 nav {
   background-color: #004080;
   padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 nav a {
@@ -21,6 +31,19 @@ nav a {
 
 nav a:hover {
   text-decoration: underline;
+}
+
+nav button {
+  background-color: #cc0000;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+nav button:hover {
+  background-color: #aa0000;
 }
 
 /* Headings */
@@ -36,6 +59,7 @@ form {
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 form input {
@@ -73,4 +97,21 @@ ul li {
   padding: 10px;
   border: 1px solid #ddd;
   border-radius: 4px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav a {
+    margin-bottom: 10px;
+  }
+
+  .container {
+    padding: 10px;
+  }
 }

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Navbar from "./components/Navbar";
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import Interns from "./pages/Interns";
-import Courses from "./pages/Courses";
-import Notifications from "./pages/Notifications";
+import Navbar from "./components/Navbar.jsx";
+import Login from "./pages/Login.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import Interns from "./pages/Interns.jsx";
+import Courses from "./pages/Courses.jsx";
+import Notifications from "./pages/Notifications.jsx";
 
 export default function App() {
   const [token, setToken] = useState(null);
 
   return (
     <Router>
-      <Navbar />
+      <Navbar token={token} setToken={setToken} />
       <Routes>
         <Route path="/" element={<Login setToken={setToken} />} />
         <Route path="/dashboard" element={<Dashboard token={token} />} />
