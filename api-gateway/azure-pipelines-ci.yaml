@@ -23,11 +23,14 @@ stages:
       inputs:
         versionSpec: '410.0.0'
         checkLatest: true
-    - task: JavaToolInstaller@0
+    - task: Bash@3
+      displayName: "Install JDK 25"
       inputs:
-        versionSpec: '25'
-        jdkArchitectureOption: 'x64'
-        jdkSourceOption: 'PreInstalled'
+        targetType: 'inline'
+        script: |
+          sudo apt-get update -y
+          sudo apt-get install -y openjdk-25-jdk
+          java -version
 
     - task: Maven@4
       inputs:
