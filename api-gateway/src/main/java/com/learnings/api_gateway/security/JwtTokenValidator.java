@@ -41,7 +41,7 @@ public class JwtTokenValidator {
         Object roles = jwt.getClaims().get("roles");
         return switch (roles) {
             case null -> Collections.emptyList();
-            case List _ -> (List<String>) roles;
+            case List li -> (List<String>) roles;
             case String s -> List.of(s.split(","));
             default -> List.of(String.valueOf(roles));
         };
