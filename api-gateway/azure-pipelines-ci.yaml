@@ -57,7 +57,7 @@ stages:
         targetType: 'inline'
         script: |
           echo "Building image: $(FULL_IMAGE)"
-          docker build -t $(FULL_IMAGE) .
+          docker build -t $(FULL_IMAGE) -f api-gateway/Dockerfile api-gateway/ 
     - task: Bash@3
       displayName: "Push Docker Image"
       inputs:
