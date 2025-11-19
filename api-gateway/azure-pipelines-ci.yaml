@@ -6,6 +6,7 @@ pool:
 
 variables:
 - group: azure-group
+
 - name: IMAGE_TAG
   value: $(Build.BuildId)
 - name: FULL_IMAGE
@@ -57,10 +58,10 @@ stages:
           set -euo pipefail
           sudo apt-get update -y
           sudo apt-get install -y openjdk-21-jdk
-          echo "JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64" >> $BASH_ENV
-          echo "PATH=$JAVA_HOME/bin:$PATH" >> $BASH_ENV
-          source $BASH_ENV
+          export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+          export PATH=$JAVA_HOME/bin:$PATH
           java -version
+
 
     - task: Maven@4
       displayName: Maven build (JDK 21, no preview)
