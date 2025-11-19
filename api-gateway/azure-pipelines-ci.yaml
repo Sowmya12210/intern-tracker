@@ -25,7 +25,7 @@ stages:
 
     - task: GoogleCloudSdkTool@1
       inputs:
-        versionSpec: ''
+        versionSpec: '410.0.0'
         checkLatest: true
     - task: Bash@3
       displayName: "Install JDK 25"
