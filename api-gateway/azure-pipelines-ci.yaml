@@ -41,6 +41,7 @@ stages:
       inputs:
         mavenPomFile: 'api-gateway/pom.xml '
         goals: 'clean package'
+        options: '--enable-preview'
         publishJUnitResults: true
         testResultsFiles: '**/surefire-reports/TEST-*.xml'
         javaHomeOption: 'Path'
