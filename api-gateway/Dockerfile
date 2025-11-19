@@ -1,4 +1,5 @@
-FROM maven:3.9.6-eclipse-temurin-25 AS build
+FROM openjdk:25-jdk-slim AS build
+RUN apt-get update && apt-get install -y maven
 WORKDIR /app
 COPY pom.xml .
 COPY src ./src
