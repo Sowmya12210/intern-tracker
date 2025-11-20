@@ -42,17 +42,17 @@ stages:
           gcloud config set project $(PROJECT_ID)
           gcloud config set run/region $(REGION)
 
-          gcloud run deploy auth-service \
-            --image $(FULL_IMAGE) \
-            --platform managed \
-            --region $(REGION) \
-            --allow-unauthenticated \
-            --port 8080 \
-            --set-env-vars \
-              DB_URL=$(AUTH_DB_URL),\
-              DB_USER=$(AUTH_DB_USER),\
-              DB_PASS=$(AUTH_DB_PASS),\
-              JWT_SECRET=$(AUTH_JWT_SECRET)
+          # gcloud run deploy auth-service \
+          #   --image $(FULL_IMAGE) \
+          #   --platform managed \
+          #   --region $(REGION) \
+          #   --allow-unauthenticated \
+          #   --port 8080 \
+          #   --set-env-vars \
+          #     DB_URL=$(AUTH_DB_URL),\
+          #     DB_USER=$(AUTH_DB_USER),\
+          #     DB_PASS=$(AUTH_DB_PASS),\
+          #     JWT_SECRET=$(AUTH_JWT_SECRET)
 
           gcloud run deploy auth-service \
             --image $(LATEST_IMAGE) \
