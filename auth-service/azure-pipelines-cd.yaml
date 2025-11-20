@@ -60,8 +60,8 @@ stages:
             --region $(REGION) \
             --allow-unauthenticated \
             --port 8080 \
+            --add-cloudsql-instances $(PROJECT_ID):$(REGION):$(INSTANCE_NAME) \
             --set-env-vars \
-             --add-cloudsql-instances $(PROJECT_ID):$(REGION):$(INSTANCE_NAME) \
               DB_URL=$(AUTH_DB_URL),\
               DB_USER=$(AUTH_DB_USER),\
               DB_PASS=$(AUTH_DB_PASS),\
