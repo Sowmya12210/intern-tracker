@@ -1,5 +1,10 @@
 trigger:
-  - dev
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - intern-service/**
 
 pool:
   vmImage: 'ubuntu-latest'
