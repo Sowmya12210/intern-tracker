@@ -14,9 +14,9 @@ variables:
 - name: IMAGE_TAG
   value: $(Build.BuildId)
 - name: FULL_IMAGE
-  value: '$(REGISTRY)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_AUTH):$(IMAGE_TAG)'
+  value: '$(REGISTRY_URL)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_AUTH):$(IMAGE_TAG)'
 - name: LATEST_IMAGE
-  value: '$(REGISTRY)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_AUTH):latest'
+  value: '$(REGISTRY_URL)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_AUTH):latest'
 
 stages:
 - stage: Deploy
