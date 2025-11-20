@@ -1,0 +1,105 @@
+trigger:
+  - none
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: azure-group
+
+- name: IMAGE_TAG
+  value: $(Build.BuildId)
+- name: FULL_IMAGE
+  value: '$(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_AUTH):$(IMAGE_TAG)'
+- name: LATEST_IMAGE
+  value: '$(REGISTRY_URL)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_AUTH):latest'
+
+stages:
+- stage: BuildAndPush
+  jobs:
+  - job: Push
+    steps:
+    - task: DownloadSecureFile@1
+      name: gcpKey
+      inputs:
+        secureFile: 'gcp-key.json'
+
+    - task: GoogleCloudSdkTool@1
+      inputs:
+        versionSpec: '410.0.0'
+        checkLatest: true
+    # - task: Bash@3
+    #   displayName: "Install JDK 21"
+    #   inputs:
+    #     targetType: 'inline'
+    #     script: |
+    #       sudo apt-get update -y
+    #       sudo apt-get install -y openjdk-21-jdk
+    #       java -version
+
+
+    # - task: Maven@4
+    #   inputs:
+    #     mavenPomFile: 'api-gateway/pom.xml '
+    #     goals: 'clean package'
+    #     publishJUnitResults: true
+    #     testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    #     javaHomeOption: 'Path'
+    #     jdkDirectory: '/usr/lib/jvm/java-21-openjdk-amd64'
+    #     mavenVersionOption: 'Default'
+    #     mavenAuthenticateFeed: false
+    #     effectivePomSkip: false
+    #     sonarQubeRunAnalysis: false
+    - task: Bash@3
+      displayName: Install JDK 21
+      inputs:
+        targetType: 'inline'
+        script: |
+          set -euo pipefail
+          sudo apt-get update -y
+          sudo apt-get install -y openjdk-21-jdk
+          export JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+          export PATH=$JAVA_HOME/bin:$PATH
+          java -version
+
+
+    - task: Maven@4
+      displayName: Maven build (JDK 21, no preview)
+      inputs:
+        mavenPomFile: 'api-gateway/pom.xml'
+        goals: 'clean package'
+        options: '-DskipTests=false'
+        publishJUnitResults: true
+        testResultsFiles: '**/surefire-reports/TEST-*.xml'
+        javaHomeOption: 'Path'
+        jdkDirectory: '/usr/lib/jvm/java-21-openjdk-amd64'
+        mavenVersionOption: 'Default'
+        mavenAuthenticateFeed: false
+        effectivePomSkip: true
+        sonarQubeRunAnalysis: false
+
+    - task: Bash@3
+      displayName: "Authenticate to GCP and Configure Docker"
+      inputs:
+        targetType: 'inline'
+        script: |
+          gcloud auth activate-service-account --key-file=$(gcpKey.secureFilePath)
+          gcloud auth configure-docker $(REGISTRY_URL) -q
+
+    - task: Bash@3
+      displayName: "Build Docker Image"
+      inputs:
+        targetType: 'inline'
+        script: |
+          echo "Building image: $(FULL_IMAGE)"
+          docker build -t $(FULL_IMAGE) -f api-gateway/Dockerfile api-gateway/
+
+    - task: Bash@3
+      displayName: "Push Docker Image"
+      inputs:
+        targetType: 'inline'
+        script: |
+          docker tag $(FULL_IMAGE) $(LATEST_IMAGE)
+          echo "Pushing image: $(FULL_IMAGE)"
+          docker push $(FULL_IMAGE)
+          docker push $(LATEST_IMAGE)

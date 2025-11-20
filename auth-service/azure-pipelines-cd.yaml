@@ -1,0 +1,68 @@
+trigger:
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - auth-service/**
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: azure-group
+- name: IMAGE_TAG
+  value: $(Build.BuildId)
+- name: FULL_IMAGE
+  value: '$(REGISTRY_URL)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_AUTH):$(IMAGE_TAG)'
+- name: LATEST_IMAGE
+  value: '$(REGISTRY_URL)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_AUTH):latest'
+
+stages:
+- stage: Deploy
+  jobs:
+  - job: DeployAuthService
+    steps:
+    - task: DownloadSecureFile@1
+      name: gcpKey
+      inputs:
+        secureFile: 'gcp-key.json'
+
+    - task: GoogleCloudSdkTool@1
+      inputs:
+        versionSpec: '410.0.0'
+        checkLatest: true
+
+    - task: Bash@3
+      displayName: Deploy auth-service to Cloud Run
+      inputs:
+        targetType: 'inline'
+        script: |
+          gcloud auth activate-service-account --key-file=$(gcpKey.secureFilePath)
+          gcloud config set project $(PROJECT_ID)
+          gcloud config set run/region $(REGION)
+
+          # gcloud run deploy auth-service \
+          #   --image $(FULL_IMAGE) \
+          #   --platform managed \
+          #   --region $(REGION) \
+          #   --allow-unauthenticated \
+          #   --port 8080 \
+          #   --set-env-vars \
+          #     DB_URL=$(AUTH_DB_URL),\
+          #     DB_USER=$(AUTH_DB_USER),\
+          #     DB_PASS=$(AUTH_DB_PASS),\
+          #     JWT_SECRET=$(AUTH_JWT_SECRET)
+
+          gcloud run deploy auth-service \
+            --image $(LATEST_IMAGE) \
+            --platform managed \
+            --region $(REGION) \
+            --allow-unauthenticated \
+            --port 8080 \
+            --add-cloudsql-instances $(PROJECT_ID):$(REGION):$(INSTANCE_NAME) \
+            --set-env-vars \
+              DB_URL=$(AUTH_DB_URL),\
+              DB_USER=$(AUTH_DB_USER),\
+              DB_PASS=$(AUTH_DB_PASS),\
+              JWT_SECRET=$(AUTH_JWT_SECRET)
