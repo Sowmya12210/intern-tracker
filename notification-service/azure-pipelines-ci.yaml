@@ -9,9 +9,9 @@ variables:
 - name: IMAGE_TAG
   value: $(Build.BuildId)
 - name: FULL_IMAGE
-  value: '$(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME):$(IMAGE_TAG)'
+  value: '$(REGION)-docker.pkg.dev/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_NOTIFICATION):$(IMAGE_TAG)'
 - name: LATEST_IMAGE
-  value: '$(REGISTRY_URL)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME):latest'
+  value: '$(REGISTRY_URL)/$(PROJECT_ID)/$(REPO)/$(IMAGE_NAME_NOTIFICATION):latest'
 
 stages:
 - stage: BuildAndPush
