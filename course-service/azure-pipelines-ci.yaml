@@ -1,5 +1,11 @@
 trigger:
-  - dev
+  branches:
+    include:
+      - dev
+  paths:
+    include:
+      - course-service/**
+
 
 pool:
   vmImage: 'ubuntu-latest'
