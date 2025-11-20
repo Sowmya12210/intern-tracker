@@ -49,10 +49,10 @@ stages:
             --allow-unauthenticated \
             --port 8080 \
             --set-env-vars \
-              DB_URL=$(DB_URL),\
-              DB_USER=$(DB_USER),\
-              DB_PASS=$(DB_PASS),\
-              JWT_SECRET=$(JWT_SECRET)
+              DB_URL=$(AUTH_DB_URL),\
+              DB_USER=$(AUTH_DB_USER),\
+              DB_PASS=$(AUTH_DB_PASS),\
+              JWT_SECRET=$(AUTH_JWT_SECRET)
 
           gcloud run deploy auth-service \
             --image $(LATEST_IMAGE) \
@@ -61,7 +61,7 @@ stages:
             --allow-unauthenticated \
             --port 8080 \
             --set-env-vars \
-              DB_URL=$(DB_URL),\
-              DB_USER=$(DB_USER),\
-              DB_PASS=$(DB_PASS),\
-              JWT_SECRET=$(JWT_SECRET)
+              DB_URL=$(AUTH_DB_URL),\
+              DB_USER=$(AUTH_DB_USER),\
+              DB_PASS=$(AUTH_DB_PASS),\
+              JWT_SECRET=$(AUTH_JWT_SECRET)
